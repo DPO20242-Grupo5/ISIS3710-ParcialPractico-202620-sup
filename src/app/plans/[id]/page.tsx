@@ -60,7 +60,7 @@ export default function PlanDetailPage() {
         <Link href="/plans" className="text-slate-700">
           ← Volver a planes
         </Link>
-        
+
       </div>
 
       <div className="flex gap-8 mt-4">
@@ -179,8 +179,18 @@ export default function PlanDetailPage() {
               Seguro de accidentes incluido para todos los participantes registrados.
             </p>
           </div>
+          {/*equipamiento*/}
+          <div className="bg-blue-50 rounded-2xl p-6 mt-8">
+            <p className="font-semibold text-slate-900"><span aria-hidden="true"></span> Equipamiento</p>
+            <ul className="text-sm text-slate-600 mt-2">
+              {plan.equipment.map((equipment: string) => (
+                <li key={equipment}>{equipment}</li>
+              ))}
+            </ul>
+          </div>
         </div>
       </div>
+
     </div>
   );
 }

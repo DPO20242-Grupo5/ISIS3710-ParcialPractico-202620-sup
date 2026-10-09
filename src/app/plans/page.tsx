@@ -16,14 +16,14 @@ export default async function PlansPage() {
               className="w-full h-60 object-cover rounded-xl"
             />
             <h4 className="text-2xl text-slate-900 mt-3">{plan.name}</h4>
-            <p className="flex items-center text-sm text-slate-300">
+            <p className="flex items-center text-sm text-black mt-1">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
                 strokeWidth={2}
-                stroke="currentColor"
-                className="w-4 h-4 mr-1"
+                stroke="#000000ff"
+                className="w-4 h-4 mr-1 text-black"
               >
                 <path
                   strokeLinecap="round"
@@ -32,12 +32,13 @@ export default async function PlansPage() {
                 />
               </svg>
               {plan.creator.name}
+
             </p>
             <div className="flex justify-between items-center mt-1">
-              <p className="text-slate-300">
+              <p className="text-black mt-1">
                 Aproximado: ${plan.estimatedPrice}
               </p>
-              <p className="flex items-center text-slate-500">
+              <p className="flex items-center text-slate-500 text-red-500">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"

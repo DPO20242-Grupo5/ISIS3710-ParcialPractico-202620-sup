@@ -5,6 +5,39 @@ import { useRouter } from "next/navigation";
 import { getSession } from "@/services/session";
 import { createPlan } from "@/services/plans";
 
+function validacion(field: string, value: string): string {
+  switch (field) {
+    case "image":
+      if (!value) return "La imagen es obligatoria";
+      return "";
+    case "name":
+      if (!value) return "El nombre es obligatorio";
+      if (value.length > 60) return "El nombre debe ser maximo 60 caracteres";
+      return "";
+    case "address":
+      if (!value) return "La dirección es obligatoria";
+      return "";
+    case "estimatedPrice":
+      if (!value) return "El precio es obligatorio";
+      if (Number(value) < 0) return "El precio debe ser positivo";
+      return "";
+    case "estimatedTime":
+      if (!value) return "La duración es obligatoria";
+      if (Number(value) < 0) return "La duración debe ser positiva";
+      return "";
+    case "description":
+      if (!value) return "La descripción es obligatoria";
+      if (value.length > 600 || value.length < 10) return "La descripción debe ser menor a 600 caracteres y mayor a 10 caracteres";
+      return "";
+    case "recomendations":
+      if (!value) return "Las recomendaciones son obligatorias";
+      return "";
+    default:
+      return "";
+  }
+
+}
+
 export default function NewPlanPage() {
   const router = useRouter();
   const [showCancelModal, setShowCancelModal] = useState(false);
@@ -16,11 +49,20 @@ export default function NewPlanPage() {
   const [estimatedTime, setEstimatedTime] = useState("");
   const [description, setDescription] = useState("");
   const [recomendations, setRecomendations] = useState("");
-  const [error, setError] = useState("");
+  const [equipment, setEquipment] = useState("");
+
+  const [errors, setErrors] = useState({
+    name: "",
+    image: "",
+    address: "",
+    estimatedPrice: "",
+    estimatedTime: "",
+    description: "",
+    recomendations: "",
+  });
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    setError("");
 
     // El id del usuario se guardó en el localStorage al iniciar sesión
     const session = getSession();
@@ -28,6 +70,16 @@ export default function NewPlanPage() {
     if (!session.id) {
       router.push("/auth/login");
       return;
+    }
+
+
+    function handleBlur(e: React.FocusEvent<HTMLInputElement>) {
+      const { name, value } = e.target;
+      const error = validacion(name, value);
+      setErrors((prev) => ({
+        ...prev,
+        [name]: error,
+      }));
     }
 
     try {
@@ -43,8 +95,10 @@ export default function NewPlanPage() {
       });
       router.push("/plans");
     } catch (err) {
-      setError("No se pudo crear el plan, revisa los datos");
-      console.log(err);
+      setErrors((prev) => ({
+        ...prev,
+        name: "Error al crear el plan",
+      }));
     }
   }
 
@@ -108,6 +162,7 @@ export default function NewPlanPage() {
             autoComplete="nombre-plan"
             value={name}
             onChange={(e) => setName(e.target.value)}
+            //onBlur={handleBlur}
             placeholder="Ej. Tarde de paddle surf y atardecer"
             className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-slate-900 placeholder:text-slate-500 mt-2 outline-none"
           />
@@ -122,6 +177,7 @@ export default function NewPlanPage() {
             name="address"
             value={address}
             onChange={(e) => setAddress(e.target.value)}
+            //onBlur={handleBlur}
             className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-slate-900 placeholder:text-slate-500 mt-2 outline-none"
           />
 
@@ -137,6 +193,7 @@ export default function NewPlanPage() {
                 name="estimatedPrice"
                 value={estimatedPrice}
                 onChange={(e) => setEstimatedPrice(e.target.value)}
+                //onBlur={handleBlur}
                 className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-slate-900 placeholder:text-slate-500 mt-2 outline-none"
               />
             </div>
@@ -150,6 +207,7 @@ export default function NewPlanPage() {
                 name="estimatedTime"
                 value={estimatedTime}
                 onChange={(e) => setEstimatedTime(e.target.value)}
+                //onBlur={handleBlur}
                 placeholder="Ej. 120"
                 className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-slate-900 placeholder:text-slate-500 mt-2 outline-none"
               />
@@ -169,6 +227,7 @@ export default function NewPlanPage() {
             aria-describedby="description-help"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
+            //onBlur={handleBlur}
             rows={4}
             placeholder="Cuéntale a todos de qué va el plan, cuál es la vibra del grupo, el itinerario aproximado y qué lo hace especial..."
             className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-slate-900 placeholder:text-slate-500 mt-2 outline-none"
@@ -190,8 +249,33 @@ export default function NewPlanPage() {
             placeholder="Ej. Llevar protector solar, toalla y agua"
             className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-slate-900 placeholder:text-slate-500 mt-3 outline-none"
           />
+          {/* Equipamiento */}
+          <label htmlFor="equipment" className="block font-semibold text-slate-900 mt-8">
+            Equipamiento <span className="text-orange-700">*</span>
+          </label>
+          <input
+            id="equipment"
+            type="text"
+            name="equipment"
+            value={equipment}
+            onChange={(e) => setEquipment(e.target.value)}
+            placeholder="Ej. Protector solar, toalla y agua"
+            className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-slate-900 placeholder:text-slate-500 mt-3 outline-none"
+          />
+          <button className="w-full bg-slate-200 text-slate-700 font-semibold rounded-xl px-8 py-3" onClick={() => setEquipment(equipment + " ")}>
+            Agregar equipo
+            {equipment && (
+              <p className="text-sm text-slate-300 mt-1">
+                {equipment}
+              </p>
+            )}
+          </button>
 
-          {error && <p className="text-sm text-red-600 mt-6">{error}</p>}
+
+
+
+
+          {errors.name && <p className="text-sm text-red-600 mt-6">{errors.name}</p>}
 
           {/* Botones */}
           <div className="flex justify-end items-center gap-6 border-t border-slate-200 pt-6 mt-10">

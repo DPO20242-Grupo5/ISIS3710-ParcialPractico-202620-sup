@@ -35,7 +35,8 @@ export default function Home() {
           type="text"
           name="search"
           placeholder="Conciertos, cenas, escapadas..."
-          className="flex-1 px-3 outline-none"
+          className="flex-1 px-3 outline-none text-black"
+
         />
         <button
           type="submit"
