@@ -264,12 +264,13 @@ export default function NewPlanPage() {
           />
           <button className="w-full bg-slate-200 text-slate-700 font-semibold rounded-xl px-8 py-3" onClick={() => setEquipment(equipment + " ")}>
             Agregar equipo
-            {equipment && (
-              <p className="text-sm text-slate-300 mt-1">
-                {equipment}
-              </p>
-            )}
+
           </button>
+          {plan.equipment.map((equipment, index) => (
+            <p key={index} className="text-sm text-slate-300 mt-1">
+              {equipment}
+            </p>
+          )}
 
 
 
