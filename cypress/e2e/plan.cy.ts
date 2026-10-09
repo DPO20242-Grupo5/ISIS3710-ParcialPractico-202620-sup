@@ -13,7 +13,7 @@ describe("PlanCreationsSpec - Creación de un nuevo plan", () => {
 
   beforeEach(() => {
     cy.visit("http://localhost:3000/plans/new");
-    waitForHydration("#__next");
+
   });
 
   it("Debe mostrar los títulos de la página", () => {
@@ -30,7 +30,7 @@ describe("PlanCreationsSpec - Creación de un nuevo plan", () => {
     cy.get("#recomendations").should("be.visible");
     cy.get("#equipment").should("be.visible");
     cy.get("#image").should("be.visible");
-    cy.get("button").should("contain", "Crear plan");
+    cy.get("button").should("contain", "Publicar plan");
   })
 
   it("Debe validar los campos del formulario", () => {

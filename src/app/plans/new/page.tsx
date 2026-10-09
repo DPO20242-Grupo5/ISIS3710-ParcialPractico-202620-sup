@@ -266,11 +266,12 @@ export default function NewPlanPage() {
             Agregar equipo
 
           </button>
-          {plan.equipment.map((equipment, index) => (
+          {/* {plan.equipment.map((equipment, index) => (
             <p key={index} className="text-sm text-slate-300 mt-1">
               {equipment}
             </p>
-          )}
+          ))} */}
+
 
 
 
